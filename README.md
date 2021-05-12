@@ -1,2 +1,2 @@
 # 10PRINT
-Generative art ideas around 10 PRINT algorithm.
+Generative art experiments around 10 PRINT algorithm of maze generation.
