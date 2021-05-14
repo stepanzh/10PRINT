@@ -8,8 +8,12 @@ import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--seed", type=int, default=0, help="seed for the maze")
+    parser.add_argument("-s", "--seed", default=None, help="seed for maze (None or int)")
+    
     args = parser.parse_args()
+
+    if args.seed is not None:
+        args.seed = int(args.seed)
     return args
 
 
