@@ -1,19 +1,42 @@
 #!/usr/bin/env python3
 
 from lib.tenprint import Maze
+from lib.mazepattern import MazePattern
 from lib.color import ANSIColors
+
+import lib.config as config
 
 import argparse
 
 
+DEFAULT_CHARS = ''.join(config.DEFAULT_MAZE_CHARS)
+DEFAULT_FILL = config.DEFAULT_MAZE_CONNECTIVITY_PATTERN_FILL
+DEFAULT_PATTERN = ''.join(config.DEFAULT_MAZE_CONNECTIVITY_PATTERN)
+
+
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--seed", default=None, help="seed for maze (None or int)")
-    
+    parser = argparse.ArgumentParser(
+        description='10PRINT maze generator with colored connectivity components.'
+    )
+    parser.add_argument("-s", "--seed", default=None,
+        help="Seed for maze (int). Default is python's None, so maze shall be random."
+    )
+
+    parser.add_argument('-c', '--chars', type=str, default=DEFAULT_CHARS,
+        help='Two characters which maze consists of.'
+    )
+    parser.add_argument('-f', '--fill', type=str, default=DEFAULT_FILL,
+        help='Fill character of connectivity pattern. Default is \'{}\'.'.format(DEFAULT_FILL)
+    )
+    parser.add_argument('-p', '--pattern', type=str, default=DEFAULT_PATTERN,
+        help='Connectivity pattern (string of 18 characters). Default is \'{}\'.'.format(DEFAULT_PATTERN)
+    )
+
     args = parser.parse_args()
 
     if args.seed is not None:
         args.seed = int(args.seed)
+
     return args
 
 
