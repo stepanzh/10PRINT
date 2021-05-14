@@ -87,9 +87,15 @@ class Maze(object):
         "Returns connectivity components."
         return [set(comp) for comp in self._components]
 
-    def fill_matrix(self, val=None):
-        "Utility function. Returns matrix of same size as `self.maze` filled with `val`."
-        return [[val] * self.size.width for _ in range(self.size.height)]
+    def fill_matrix(self, val=None, size=None):
+        """
+        Utility function.
+        Returns matrix of `size` (width, height) filled with `val`. Default `size` is size of the maze.
+        """
+        if size is None:
+            size = self.size
+        w, h = size
+        return [[val] * w for _ in range(h)]
 
     def _calc_components(self):
         "Calculates connectivity components of `self.maze`."
