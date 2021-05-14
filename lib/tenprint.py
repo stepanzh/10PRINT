@@ -1,9 +1,10 @@
 import random
 from collections import deque
 from lib.utils import Size
+import lib.config as config
 
-DEFAULT_SEED = 1
-DEFAULT_CHARS = ('╱', '╲')
+DEFAULT_SEED = config.DEFAULT_MAZE_SEED
+DEFAULT_CHARS = config.DEFAULT_MAZE_CHARS
 
 
 class Maze(object):
