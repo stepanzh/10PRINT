@@ -51,5 +51,8 @@ class MazePattern(object):
         s = ''.join(''.join(row) for row in matrix)
         return s
 
+    def chars(self):
+        return self._chars
+
     def fill(self):
         return self._fill
