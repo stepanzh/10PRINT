@@ -16,10 +16,44 @@ DEFAULT_SIZE = ','.join(map(str, config.DEFAULT_MAZE_SIZE))
 DEFAULT_MARGIN = ','.join(map(str, [0, 0]))
 DEFAULT_COLORS = ','.join(map(str, [4, 6, 12, 218, 21, 26, 27, 127, 81, 225]))
 
+CLI_EPILOG = '''{bold}Maze pattern manual (-c, -f, -p options).{reset}
+  
+ Maze characters: -c option.
+  Maze consists of set of two characters. They are defined by -c option.
+  For example, if you want a maze from circles '●' and spaces ' ' you should specify -c '● '.
+  Tip: to avoid conflicts with terminal characters, use '=' argument formatting -c='● '.
+
+ Fill character: -f option.
+  Fill character is supplementary character for defining connectivity pattern.
+  You must specify it when default fill character '{fill}' is one of yours maze character.
+  You may specify it when default fill character '{fill}' is not suitable for defining connectivity pattern.
+
+ Connectivity pattern: -p option.
+  This option defines adjacent cells of maze.
+  As maze is two-dimensional, each character is supposed to be connected with at most 8 characters.
+  To specify which character connects to which, following matrices are used.
+  For example, in standard 10PRINT '\\' and '/' were used, and the connectivity matrices are
+    for '\\': \\/x      for '/': x\\/
+             /\\/               \\/\\
+             x/\\               /\\x
+    Center of matrix is character which connectivity behavior you want to define.
+    This center is surrounded by
+      a. Maze characters which center relatively connects to;
+      b. Fill characters. They are used to define absence of connection with any of characters.
+  To define connectivity pattern, do the following
+    1. Concatenate rows of matrix for first maze character:    '\\/x/\\/x/\\'         ;
+    2. Concatenate rows of matrix for second maze character:            'x\\/\\/\\/\\x';
+    3. Concatenate string from step 1 with string from step 2: '\\/x/\\/x/\\x\\/\\/\\/\\x'.
+
+  So, the following command generates colored 10PRINT maze consists of '\\/' with original connectivity pattern
+    ./tenprint_components.py -c '\\/' -p '\\/x/\\/x/\\x\\/\\/\\/\\x'
+'''.format(bold='\u001b[1m', underline='\u001b[4m', reset=ANSIColors.reset, fill=DEFAULT_FILL)
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='10PRINT maze generator with colored connectivity components.'
+        description='10PRINT maze generator with colored connectivity components.',
+        epilog=CLI_EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("-s", "--seed", default=None,         # default is None for random.seed()
         help='Seed for maze (int). Default is random maze.'
