@@ -14,18 +14,18 @@ DEFAULT_FILL = config.DEFAULT_MAZE_CONNECTIVITY_PATTERN_FILL
 DEFAULT_PATTERN = ''.join(config.DEFAULT_MAZE_CONNECTIVITY_PATTERN)
 DEFAULT_SIZE = ','.join(map(str, config.DEFAULT_MAZE_SIZE))
 DEFAULT_MARGIN = ','.join(map(str, [0, 0]))
-DEFAULT_COLORS = ','.join(map(str, [4, 6, 12, 17, 21, 26, 27, 32, 81]))
+DEFAULT_COLORS = ','.join(map(str, [4, 6, 12, 218, 21, 26, 27, 127, 81, 225]))
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         description='10PRINT maze generator with colored connectivity components.'
     )
-    parser.add_argument("-s", "--seed", default=None,
-        help="Seed for maze (int). Default is python's None, so maze shall be random."
+    parser.add_argument("-s", "--seed", default=None,         # default is None for random.seed()
+        help='Seed for maze (int). Default is random maze.'
     )
     parser.add_argument('-S', '--size', type=str, default=DEFAULT_SIZE,
-        help='Size of the maze in characters. Format is \'width,height\'. Default is \'{}\''.format(DEFAULT_SIZE)
+        help='Size of maze in characters. Format is \'width,height\'. Default is \'{}\''.format(DEFAULT_SIZE)
     )
     parser.add_argument('-M', '--margin', type=str, default=DEFAULT_MARGIN,
         help='Top (=bottom) and left margin in characters for maze printing. Format is \'top_margin,left_margin\'.'
@@ -42,7 +42,7 @@ def parse_args():
     )
 
     parser.add_argument('-C', '--colors', type=str, default=DEFAULT_COLORS,
-        help='Color set for components. Format is \'c1,c2,c3,...\' where ci is int (0..255) representing ansi color code. Run ansi_pallette.py for full list of codes.'
+        help='Color set for components. Format is \'c1,c2,c3,...\' where ci is int (0..255) representing ansi color code. Run ansi_pallette.py for full list of codes. Default is \'{}\''.format(DEFAULT_COLORS)
     )
 
     args = parser.parse_args()
