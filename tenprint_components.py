@@ -25,7 +25,7 @@ CLI_EPILOG = '''{bold}Maze pattern manual (-c, -f, -p options).{reset}
 
  Fill character: -f option.
   Fill character is supplementary character for defining connectivity pattern.
-  You must specify it when default fill character '{fill}' is one of yours maze character.
+  You must specify it when default fill character '{fill}' is one of your maze character.
   You may specify it when default fill character '{fill}' is not suitable for defining connectivity pattern.
 
  Connectivity pattern: -p option.
@@ -33,20 +33,20 @@ CLI_EPILOG = '''{bold}Maze pattern manual (-c, -f, -p options).{reset}
   As maze is two-dimensional, each character is supposed to be connected with at most 8 characters.
   To specify which character connects to which, following matrices are used.
   For example, in standard 10PRINT '\\' and '/' were used, and the connectivity matrices are
-    for '\\': \\/x      for '/': x\\/
+    for '\\': \\/{fill}      for '/': {fill}\\/
              /\\/               \\/\\
-             x/\\               /\\x
+             {fill}/\\               /\\{fill}
     Center of matrix is character which connectivity behavior you want to define.
     This center is surrounded by
       a. Maze characters which center relatively connects to;
       b. Fill characters. They are used to define absence of connection with any of characters.
   To define connectivity pattern, do the following
-    1. Concatenate rows of matrix for first maze character:    '\\/x/\\/x/\\'         ;
-    2. Concatenate rows of matrix for second maze character:            'x\\/\\/\\/\\x';
-    3. Concatenate string from step 1 with string from step 2: '\\/x/\\/x/\\x\\/\\/\\/\\x'.
+    1. Concatenate rows of matrix for first maze character:    '\\/{fill}/\\/{fill}/\\'         ;
+    2. Concatenate rows of matrix for second maze character:            '{fill}\\/\\/\\/\\{fill}';
+    3. Concatenate string from step 1 with string from step 2: '\\/{fill}/\\/{fill}/\\{fill}\\/\\/\\/\\{fill}'.
 
   So, the following command generates colored 10PRINT maze consists of '\\/' with original connectivity pattern
-    ./tenprint_components.py -c '\\/' -p '\\/x/\\/x/\\x\\/\\/\\/\\x'
+    ./tenprint_components.py -c '\\/' -p '\\/{fill}/\\/{fill}/\\{fill}\\/\\/\\/\\{fill}'
 '''.format(bold='\u001b[1m', underline='\u001b[4m', reset=ANSIColors.reset, fill=DEFAULT_FILL)
 
 def parse_args():
@@ -66,7 +66,7 @@ def parse_args():
     )
 
     parser.add_argument('-c', '--chars', type=str, default=DEFAULT_CHARS,
-        help='Two characters which maze consists of.'
+        help='Two characters which maze consists of. Default is \'{}\''.format(DEFAULT_CHARS)
     )
     parser.add_argument('-f', '--fill', type=str, default=DEFAULT_FILL,
         help='Fill character of connectivity pattern. Default is \'{}\'.'.format(DEFAULT_FILL)
@@ -76,7 +76,7 @@ def parse_args():
     )
 
     parser.add_argument('-C', '--colors', type=str, default=DEFAULT_COLORS,
-        help='Color set for components. Format is \'c1,c2,c3,...\' where ci is int (0..255) representing ansi color code. Run ansi_pallette.py for full list of codes. Default is \'{}\''.format(DEFAULT_COLORS)
+        help='Color set for components. Format is \'c1,c2,c3,...\' where ci is int (0..255) representing ansi color code. Run ansi_pallette.py for full list of codes. Default is \'{}\'.'.format(DEFAULT_COLORS)
     )
 
     args = parser.parse_args()
