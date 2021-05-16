@@ -2,7 +2,7 @@
 
 from lib.tenprint import Maze
 from lib.mazepattern import MazePattern
-from lib.color import ANSIColors
+from lib.color import ANSIColors, Palette
 
 import lib.config as config
 
@@ -65,12 +65,12 @@ def scene_colored_components(maze_size, pattern=None, seed=None):
 
     maze = Maze(size=maze_size, seed=seed, pattern=pattern)
     vertex_belong = maze.vertex_belong()
-    colors = ANSIColors.reds + ANSIColors.yellows
+    colors = Palette(ANSIColors.reds + ANSIColors.yellows)
     
     print(margintop * '\n', end='')
-    for i in range(maze_size[1]):
+    for i in range(maze.size.height):
         print(marginleft * ' ', end='')
-        for j in range(maze_size[0]):
+        for j in range(maze.size.width):
             color = colors[vertex_belong[i][j] % len(colors)]
             print(color + maze.maze[i][j], end='')
         print(ANSIColors.reset)
