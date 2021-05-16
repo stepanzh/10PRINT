@@ -30,3 +30,33 @@ class ANSIColors:
     @staticmethod
     def from_code(code:int):
         return ansi_from_code(code)
+
+    @staticmethod
+    def all():
+        return list(map(ansi_from_code, range(256)))
+
+
+class Palette(object):
+    _palette = None
+
+    def __init__(self, palette):
+        """
+        `palette` is finite iterable of ansi-escape sequences (str) or codes of 256 pallete (int)
+        """
+        self._init_palette(palette)  # self._palette
+
+    def _init_palette(self, sequence):
+        if type(sequence[0]) is str:
+            self._palette = tuple(sequence)
+        else:
+            self._palette = tuple(map(ansi_from_code, sequence))
+    
+    def __getitem__(self, key):
+        return self._palette[key]
+
+    def __len__(self):
+        return len(self._palette)
+
+    def sequential(self):
+        "Returns palette."
+        return self._palette
