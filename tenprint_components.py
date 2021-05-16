@@ -13,6 +13,7 @@ DEFAULT_CHARS = ''.join(config.DEFAULT_MAZE_CHARS)
 DEFAULT_FILL = config.DEFAULT_MAZE_CONNECTIVITY_PATTERN_FILL
 DEFAULT_PATTERN = ''.join(config.DEFAULT_MAZE_CONNECTIVITY_PATTERN)
 DEFAULT_SIZE = ','.join(map(str, config.DEFAULT_MAZE_SIZE))
+DEFAULT_COLORS = ','.join(map(str, [4, 6, 12, 17, 21, 26, 27, 32, 81]))
 
 
 def parse_args():
@@ -36,6 +37,10 @@ def parse_args():
         help='Connectivity pattern (string of 18 characters). Default is \'{}\'.'.format(DEFAULT_PATTERN)
     )
 
+    parser.add_argument('-C', '--colors', type=str, default=DEFAULT_COLORS,
+        help='Color set for components. Format is \'c1,c2,c3,...\' where ci is int (0..255) representing ansi color code. Run ansi_pallette.py for full list of codes.'
+    )
+
     args = parser.parse_args()
 
     if args.seed is not None:
@@ -53,10 +58,12 @@ def parse_args():
     assert len(args.pattern) == 18, '--pattern must be 18-character string.'
     args.pattern = (args.pattern[:9], args.pattern[9:])
 
+    args.colors = list(map(int, args.colors.split(',')))
+
     return args
 
 
-def scene_colored_components(maze_size, pattern=None, seed=None):
+def scene_colored_components(maze_size, pattern=None, seed=None, colors=None):
     # terminal window size 100 x 40
 
     "window height, top margin equal bottom margin and 2 lines for prompt string"
@@ -65,7 +72,7 @@ def scene_colored_components(maze_size, pattern=None, seed=None):
 
     maze = Maze(size=maze_size, seed=seed, pattern=pattern)
     vertex_belong = maze.vertex_belong()
-    colors = Palette(ANSIColors.reds + ANSIColors.yellows)
+    colors = Palette(colors)
     
     print(margintop * '\n', end='')
     for i in range(maze.size.height):
@@ -84,4 +91,4 @@ if __name__ == '__main__':
         fill=args.fill,
         pattern=args.pattern
     )
-    scene_colored_components(maze_size=args.size, seed=args.seed, pattern=mp)
+    scene_colored_components(maze_size=args.size, seed=args.seed, pattern=mp, colors=args.colors)
