@@ -13,6 +13,7 @@ DEFAULT_CHARS = ''.join(config.DEFAULT_MAZE_CHARS)
 DEFAULT_FILL = config.DEFAULT_MAZE_CONNECTIVITY_PATTERN_FILL
 DEFAULT_PATTERN = ''.join(config.DEFAULT_MAZE_CONNECTIVITY_PATTERN)
 DEFAULT_SIZE = ','.join(map(str, config.DEFAULT_MAZE_SIZE))
+DEFAULT_MARGIN = ','.join(map(str, [0, 0]))
 DEFAULT_COLORS = ','.join(map(str, [4, 6, 12, 17, 21, 26, 27, 32, 81]))
 
 
@@ -25,6 +26,9 @@ def parse_args():
     )
     parser.add_argument('-S', '--size', type=str, default=DEFAULT_SIZE,
         help='Size of the maze in characters. Format is \'width,height\'. Default is \'{}\''.format(DEFAULT_SIZE)
+    )
+    parser.add_argument('-M', '--margin', type=str, default=DEFAULT_MARGIN,
+        help='Top (=bottom) and left margin in characters for maze printing. Format is \'top_margin,left_margin\'.'
     )
 
     parser.add_argument('-c', '--chars', type=str, default=DEFAULT_CHARS,
@@ -49,7 +53,12 @@ def parse_args():
     args.size = tuple(map(int, args.size.split(',')))
     if len(args.size) != 2:
         raise ValueError('Specified `size` is not two comma separated integers.')
-    
+
+    args.margin = tuple(map(int, args.margin.split(',')))
+    if len(args.margin) != 2:
+        raise ValueError('Specified `margin` is not two comma separated integers.')
+
+
     assert len(args.chars) == 2, '--chars must be two-character string.'
     args.chars = tuple(args.chars)
 
@@ -63,12 +72,8 @@ def parse_args():
     return args
 
 
-def scene_colored_components(maze_size, pattern=None, seed=None, colors=None):
-    # terminal window size 100 x 40
-
-    "window height, top margin equal bottom margin and 2 lines for prompt string"
-    margintop = (40 - maze_size[1]) // 2 - 2
-    marginleft = (100 - maze_size[0]) // 2
+def scene_colored_components(maze_size, pattern=None, seed=None, colors=None, margin=None):
+    margintop, marginleft = margin
 
     maze = Maze(size=maze_size, seed=seed, pattern=pattern)
     vertex_belong = maze.vertex_belong()
@@ -91,4 +96,4 @@ if __name__ == '__main__':
         fill=args.fill,
         pattern=args.pattern
     )
-    scene_colored_components(maze_size=args.size, seed=args.seed, pattern=mp, colors=args.colors)
+    scene_colored_components(maze_size=args.size, seed=args.seed, pattern=mp, colors=args.colors, margin=args.margin)
